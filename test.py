@@ -54,10 +54,27 @@ def test_example3(driver):
                     h1_element = driver.find_element(By.TAG_NAME, "h1")
                     print(h1_element.text)
                 except NoSuchElementException:
-                    print("Element not found")
+                    pytest.fail("Element not found")
         except NoSuchElementException:
             try:
                 h1_element = driver.find_element(By.TAG_NAME, "h1")
                 print(h1_element.text)
             except NoSuchElementException:
-                print("Element not found")
+                pytest.fail("Element not found")
+
+
+def test_example4(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/en/")
+    time.sleep(1)
+    li_elements = driver.find_elements(By.CSS_SELECTOR, "ul.listing-wrapper.products li.product")
+    for element in li_elements:
+        stickers = element.find_elements(By.CSS_SELECTOR, ".sticker.sale, .sticker.new")
+
+        if len(stickers) == 1:
+            if stickers[0].get_attribute("class") == "sticker sale":
+                print("Sale")
+            elif stickers[0].get_attribute("class") == "sticker new":
+                print("New")
+        else:
+            pytest.fail("Количество стикеров не равно одному")
