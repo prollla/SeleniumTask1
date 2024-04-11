@@ -2,6 +2,7 @@ import time
 
 import pytest
 from selenium import webdriver
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 
@@ -27,3 +28,29 @@ def test_example2(driver):
     time.sleep(1)
     driver.find_element(By.NAME, 'login').click()
     time.sleep(2)
+
+
+def test_example3(driver):
+    test_example2(driver)
+    li_elements = driver.find_elements(By.CSS_SELECTOR, "ul#box-apps-menu li#app-")
+    for index in range(len(li_elements)):
+        li_elements = driver.find_elements(By.CSS_SELECTOR, "ul#box-apps-menu li#app-")
+        li_elements[index].click()
+        time.sleep(1)
+        try:
+            li_secret = driver.find_elements(By.CSS_SELECTOR, "#box-apps-menu li.selected li")
+            for i in range(len(li_secret)):
+                li_secret = driver.find_elements(By.CSS_SELECTOR, "#box-apps-menu li.selected li")
+                li_secret[i].click()
+                time.sleep(1)
+                try:
+                    h1_element = driver.find_element(By.TAG_NAME, "h1")
+                    print(h1_element.text)
+                except NoSuchElementException:
+                    print("Element not found")
+        except NoSuchElementException:
+            try:
+                h1_element = driver.find_element(By.TAG_NAME, "h1")
+                print(h1_element.text)
+            except NoSuchElementException:
+                print("Element not found")
