@@ -31,7 +31,14 @@ def test_example2(driver):
 
 
 def test_example3(driver):
-    test_example2(driver)
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    time.sleep(1)
+    driver.find_element(By.NAME, 'login').click()
+    time.sleep(2)
     li_elements = driver.find_elements(By.CSS_SELECTOR, "ul#box-apps-menu li#app-")
     for index in range(len(li_elements)):
         li_elements = driver.find_elements(By.CSS_SELECTOR, "ul#box-apps-menu li#app-")
