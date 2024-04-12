@@ -67,7 +67,7 @@ def test_example4(driver):
     driver.maximize_window()
     driver.get("http://localhost/litecart/en/")
     time.sleep(1)
-    li_elements = driver.find_elements(By.CSS_SELECTOR, "ul.listing-wrapper li.product")
+    li_elements = driver.find_elements(By.CSS_SELECTOR, "li.product")
     for element in li_elements:
         stickers = element.find_elements(By.CSS_SELECTOR, ".sticker")
 
