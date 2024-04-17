@@ -2,7 +2,7 @@ import time
 
 import pytest
 from selenium import webdriver
-from selenium.common import NoSuchElementException
+from selenium.common import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
 
@@ -80,3 +80,37 @@ def test_example4(driver):
                 print("Another sticker")
         else:
             pytest.fail("Количество стикеров не равно одному")
+
+
+def test_example5(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/?app=countries&doc=countries")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    driver.find_element(By.NAME, 'login').click()
+    elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable")
+    names = []
+    names_geozones = []
+    for element in elements:
+        lines = element.find_elements(By.CSS_SELECTOR, "td:nth-child(5), td:nth-child(6)")
+
+        for i in range(0, len(lines), 2):
+            name_element = lines[i]
+            count_element = lines[i + 1]
+            if name_element.text.strip() and count_element.text.strip():
+                names.append(name_element.text)
+                if count_element.text != "0":
+                    driver.find_element(By.LINK_TEXT, name_element.text).click()
+                    geozones = driver.find_elements(By.CSS_SELECTOR, "table.dataTable")
+                    for geozone in geozones:
+                        names_geozones.append(geozone.text)
+                    driver.back()
+                    element = driver.find_element(By.CSS_SELECTOR, "table.dataTable")
+                    lines = element.find_elements(By.CSS_SELECTOR, "td:nth-child(5), td:nth-child(6)")
+    is_sorted = names == sorted(names) and names_geozones == sorted(names_geozones)
+    if is_sorted:
+        print("Sorted")
+    else:
+        pytest.fail("No sorted")
+
