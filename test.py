@@ -4,6 +4,7 @@ import pytest
 from selenium import webdriver
 from selenium.common import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 
 
 @pytest.fixture()
@@ -113,4 +114,38 @@ def test_example5(driver):
         print("Sorted")
     else:
         pytest.fail("No sorted")
+
+
+def test_example6(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    driver.find_element(By.NAME, 'login').click()
+    elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable td:nth-child(3)")
+    links_text = [element.text for element in elements]
+    names = []
+    for text in links_text:
+        names.clear()
+        link = driver.find_element(By.LINK_TEXT, text).click()
+        select_elements = driver.find_elements(By.CSS_SELECTOR, 'select[name^="zones["][name$="][zone_code]"]')
+        for select_element in select_elements:
+            select = Select(select_element)
+            selected_option = select.first_selected_option
+            names.append(selected_option.text)
+        driver.back()
+        is_sorted = names == sorted(names)
+        if is_sorted:
+            print("Sotred")
+        else:
+            pytest.fail("Not sorted")
+        elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable a")
+        links_text = [element.text for element in elements]
+
+
+
+
+
+
 
