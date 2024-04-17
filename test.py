@@ -140,8 +140,6 @@ def test_example6(driver):
             print("Sotred")
         else:
             pytest.fail("Not sorted")
-        elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable a")
-        links_text = [element.text for element in elements]
 
 
 
