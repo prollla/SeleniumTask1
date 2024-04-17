@@ -102,9 +102,9 @@ def test_example5(driver):
                 names.append(name_element.text)
                 if count_element.text != "0":
                     driver.find_element(By.LINK_TEXT, name_element.text).click()
-                    geozones = driver.find_elements(By.CSS_SELECTOR, "table.dataTable")
-                    for geozone in geozones:
-                        names_geozones.append(geozone.text)
+                    elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable")
+                    for element in elements:
+                        names_geozones.append(element.text)
                     driver.back()
                     element = driver.find_element(By.CSS_SELECTOR, "table.dataTable")
                     lines = element.find_elements(By.CSS_SELECTOR, "td:nth-child(5), td:nth-child(6)")
