@@ -150,8 +150,146 @@ def test_example6(driver):
             pytest.fail("Not sorted")
 
 
+"""def test_example7(driver):
+    driver.maximize_window()
+    main_product_data = []
+    another_product_data = []
+    driver.get("http://localhost/litecart")
+    box = driver.find_element(By.ID, "box-campaigns")
+    product = box.find_element(By.CLASS_NAME, "name")
+    main_product_data.append(product.text)
+    price = box.find_element(By.CLASS_NAME, "regular-price")
+    text_decoration = price.value_of_css_property('text-decoration')
+    strike(text_decoration, price)
+    main_product_data.append(price.text)
+    campaign_price = box.find_element(By.CLASS_NAME, "campaign-price")
+    text_decoration = campaign_price.value_of_css_property('text-decoration')
+    solid(text_decoration, campaign_price)
+    size(price, campaign_price)
+    main_product_data.append(campaign_price.text)
+    product.click()
+
+    box = driver.find_element(By.ID, "box-product")
+    product = box.find_element(By.CLASS_NAME, "title")
+    another_product_data.append(product.text)
+    price = driver.find_element(By.CLASS_NAME, "regular-price")
+    text_decoration = price.value_of_css_property('text-decoration')
+    strike(text_decoration, price)
+    another_product_data.append(price.text)
+    campaign_price = driver.find_element(By.CLASS_NAME, "campaign-price")
+    text_decoration = campaign_price.value_of_css_property('text-decoration')
+    solid(text_decoration, campaign_price)
+    size(price, campaign_price)
+    another_product_data.append(campaign_price.text)
+    if another_product_data == main_product_data:
+        pass
+    else:
+        pytest.fail("Not equals")
 
 
+def size(price, campaign_price):
+    regular_font_size = float(price.value_of_css_property('font-size')[:-2])
+    campaign_font_size = float(campaign_price.value_of_css_property('font-size')[:-2])
+    if campaign_font_size > regular_font_size:
+        pass
+    else:
+        pytest.fail('Размер шрифта у цены по акции не больше регулярной цены')
 
 
+def strike(text_decoration, price):
+    color = price.value_of_css_property('color')
+    is_strikethrough = 'line-through' in text_decoration
+    if is_strikethrough:
+        color_values = color[5:-1].split(', ')
+        r, g, b, l = map(int, color_values)
+        is_same_color = r == g == b
+        if is_same_color:
+            pass
+        else:
+            pytest.fail("Цвет не серый")
+    else:
+        pytest.fail("Текст не зачёркнут")
 
+
+def solid(text_decoration, campaign_price):
+    color = campaign_price.value_of_css_property('color')
+    is_solid = 'solid' in text_decoration
+    if is_solid:
+        color_values = color[5:-1].split(', ')
+        r, g, b, l = map(int, color_values)
+        if g == b == 0:
+            pass
+        else:
+            pytest.fail("Цвет не красный") """
+
+
+def test_example7(driver):
+    driver.maximize_window()
+    product_data = [[], []]
+    driver.get("http://localhost/litecart")
+    for i in range(2):
+        get_product_data(driver, product_data, i)
+    if product_data[0] == product_data[1]:
+        pass
+    else:
+        pytest.fail("Not equals")
+
+
+def get_product_data(driver, product_data, i):
+    if i == 0:
+        box = driver.find_element(By.ID, "box-campaigns")
+        product = box.find_element(By.CLASS_NAME, "name")
+    else:
+        box = driver.find_element(By.ID, "box-product")
+        product = box.find_element(By.CLASS_NAME, "title")
+    product_data[i].append(product.text)
+    price = driver.find_element(By.CLASS_NAME, "regular-price")
+    text_decoration = price.value_of_css_property('text-decoration')
+    strike(text_decoration, price)
+    product_data[i].append(price.text)
+    campaign_price = driver.find_element(By.CLASS_NAME, "campaign-price")
+    text_decoration = campaign_price.value_of_css_property('text-decoration')
+    solid(text_decoration, campaign_price)
+    size(price, campaign_price)
+    product_data[i].append(campaign_price.text)
+    if i == 0:
+        product.click()
+    else:
+        pass
+    return product_data
+
+
+def size(price, campaign_price):
+    regular_font_size = float(price.value_of_css_property('font-size')[:-2])
+    campaign_font_size = float(campaign_price.value_of_css_property('font-size')[:-2])
+    if campaign_font_size > regular_font_size:
+        pass
+    else:
+        pytest.fail('Размер шрифта у цены по акции не больше регулярной цены')
+
+
+def strike(text_decoration, price):
+    color = price.value_of_css_property('color')
+    is_strikethrough = 'line-through' in text_decoration
+    if is_strikethrough:
+        color_values = color[5:-1].split(', ')
+        r, g, b, l = map(int, color_values)
+        is_same_color = r == g == b
+        if is_same_color:
+            pass
+        else:
+            pytest.fail("Цвет не серый")
+    else:
+        pytest.fail("Текст не зачёркнут")
+
+
+def solid(text_decoration, campaign_price):
+    color = campaign_price.value_of_css_property('color')
+    is_solid = 'solid' in text_decoration
+    if is_solid:
+        color_values = color[5:-1].split(', ')
+        r, g, b, l = map(int, color_values)
+        if g == b == 0:
+            pass
+        else:
+            pytest.fail("Цвет не красный")
