@@ -103,17 +103,25 @@ def test_example5(driver):
                 names.append(name_element.text)
                 if count_element.text != "0":
                     driver.find_element(By.LINK_TEXT, name_element.text).click()
-                    elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable")
+                    elements = driver.find_elements(By.CSS_SELECTOR, "table.dataTable td:nth-child(3)")
                     for element in elements:
-                        names_geozones.append(element.text)
+                        if element.text.strip():
+                            names_geozones.append(element.text)
                     driver.back()
+                    print(names_geozones)
+                    is_sorted = names_geozones == sorted(names_geozones)
+                    if is_sorted:
+                        print("Sorted name_geozones")
+                    else:
+                        pytest.fail("Not sorted")
+                    names_geozones.clear()
                     element = driver.find_element(By.CSS_SELECTOR, "table.dataTable")
                     lines = element.find_elements(By.CSS_SELECTOR, "td:nth-child(5), td:nth-child(6)")
-    is_sorted = names == sorted(names) and names_geozones == sorted(names_geozones)
+    is_sorted = names == sorted(names)
     if is_sorted:
-        print("Sorted")
+        print("Sorted name")
     else:
-        pytest.fail("No sorted")
+        pytest.fail("Not sorted")
 
 
 def test_example6(driver):
