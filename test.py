@@ -9,7 +9,7 @@ from selenium.webdriver.support.select import Select
 
 @pytest.fixture()
 def driver(request):
-    driver = webdriver.Edge()
+    driver = webdriver.Chrome()
     request.addfinalizer(driver.quit)
     return driver
 
@@ -272,9 +272,8 @@ def strike(text_decoration, price):
     color = price.value_of_css_property('color')
     is_strikethrough = 'line-through' in text_decoration
     if is_strikethrough:
-        color_values = color[5:-1].split(', ')
-        r, g, b, l = map(int, color_values)
-        is_same_color = r == g == b
+        color_values = color[4:-1].split(', ')
+        is_same_color = color_values[0] == color_values[1] == color_values[2]
         if is_same_color:
             pass
         else:
@@ -287,9 +286,8 @@ def solid(text_decoration, campaign_price):
     color = campaign_price.value_of_css_property('color')
     is_solid = 'solid' in text_decoration
     if is_solid:
-        color_values = color[5:-1].split(', ')
-        r, g, b, l = map(int, color_values)
-        if g == b == 0:
+        color_values = color[4:-1].split(', ')
+        if color_values[1] == color_values[2] == "0":
             pass
         else:
             pytest.fail("Цвет не красный")
