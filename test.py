@@ -272,7 +272,7 @@ def strike(text_decoration, price):
     color = price.value_of_css_property('color')
     is_strikethrough = 'line-through' in text_decoration
     if is_strikethrough:
-        color_values = color[4:-1].split(', ')
+        color_values = color[5:-1].split(', ')
         is_same_color = color_values[0] == color_values[1] == color_values[2]
         if is_same_color:
             pass
@@ -286,7 +286,7 @@ def solid(text_decoration, campaign_price):
     color = campaign_price.value_of_css_property('color')
     is_solid = 'solid' in text_decoration
     if is_solid:
-        color_values = color[4:-1].split(', ')
+        color_values = color[5:-1].split(', ')
         if color_values[1] == color_values[2] == "0":
             pass
         else:
