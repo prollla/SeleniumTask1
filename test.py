@@ -1,3 +1,5 @@
+import random
+import string
 import time
 
 import pytest
@@ -291,3 +293,38 @@ def solid(text_decoration, campaign_price):
             pass
         else:
             pytest.fail("Цвет не красный")
+
+
+def test_example8(driver):
+    email = generate_email()
+    password = "123"
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/en/")
+    driver.find_element(By.LINK_TEXT, "New customers click here").click()
+    driver.find_element(By.NAME, "firstname").send_keys("Anton")
+    driver.find_element(By.NAME, "lastname").send_keys("Anton")
+    driver.find_element(By.NAME, "address1").send_keys("Anton")
+    driver.find_element(By.NAME, "postcode").send_keys("12345")
+    driver.find_element(By.NAME, "city").send_keys("Anton")
+    driver.find_element(By.NAME, "phone").send_keys("+123456789")
+    """driver.find_element(By.CLASS_NAME, "selection").click()
+    driver.find_element(By.XPATH, "//li[contains(text(), 'United States')]").click() """
+    select = driver.find_element(By.CSS_SELECTOR, "select")
+    driver.execute_script("arguments[0].selectedIndex=224; arguments[0].dispatchEvent(new Event('change'))", select)
+    driver.find_element(By.NAME, "email").send_keys(email)
+    driver.find_element(By.NAME, "password").send_keys(password)
+    driver.find_element(By.NAME, "confirmed_password").send_keys(password)
+    driver.find_element(By.NAME, "create_account").click()
+    driver.find_element(By.LINK_TEXT, "Logout").click()
+    driver.find_element(By.NAME, "email").send_keys(email)
+    driver.find_element(By.NAME, "password").send_keys(password)
+    driver.find_element(By.NAME, "login").click()
+    driver.find_element(By.LINK_TEXT, "Logout").click()
+
+def generate_email():
+    username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(5, 10)))
+    email = username + "@mail.ru"
+    return email
+
+
+print(generate_email())
