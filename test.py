@@ -1,6 +1,7 @@
 import random
 import string
 import time
+import os
 
 import pytest
 from selenium import webdriver
@@ -321,10 +322,54 @@ def test_example8(driver):
     driver.find_element(By.NAME, "login").click()
     driver.find_element(By.LINK_TEXT, "Logout").click()
 
+
 def generate_email():
     username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(5, 10)))
     email = username + "@mail.ru"
     return email
 
 
-print(generate_email())
+def test_example9(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/?app=catalog&doc=catalog")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    driver.find_element(By.NAME, 'login').click()
+    driver.find_element(By.LINK_TEXT, 'Add New Product').click()
+    name = generate_name()
+    driver.find_element(By.NAME, 'name[en]').send_keys(name)
+    driver.find_element(By.XPATH, '//input[@type="radio" and @value="1"]').click()
+    driver.find_element(By.NAME, 'code').send_keys("255")
+    driver.find_elements(By.CSS_SELECTOR, "input[type='checkbox'][name='product_groups[]']")[2].click()
+    driver.find_element(By.NAME, 'quantity').send_keys("1500")
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    driver.find_element(By.NAME, 'new_images[]').send_keys(os.path.join(current_directory, 'product.jpg'))
+    driver.find_element(By.NAME, 'date_valid_from').send_keys('24-04-2024')
+    driver.find_element(By.NAME, 'date_valid_to').send_keys('01-05-2024')
+    '''driver.find_element(By.NAME, 'date_valid_from').send_keys('2024-04-24') #Firefox
+    driver.find_element(By.NAME, 'date_valid_to').send_keys('2024-05-01') #Firefox'''
+    driver.find_element(By.LINK_TEXT, 'Information').click()
+    select_element = driver.find_element(By.NAME, 'manufacturer_id')
+    select = Select(select_element)
+    select.select_by_value('1')
+    driver.find_element(By.NAME, 'keywords').send_keys('product')
+    driver.find_element(By.NAME, 'short_description[en]').send_keys('product')
+    driver.find_element(By.CLASS_NAME, 'trumbowyg-editor').send_keys('product')
+    driver.find_element(By.NAME, 'head_title[en]').send_keys('product')
+    driver.find_element(By.NAME, 'meta_description[en]').send_keys('product')
+    driver.find_element(By.LINK_TEXT, 'Data').click()
+    driver.find_element(By.NAME, 'sku').send_keys('123')
+    driver.find_element(By.NAME, 'gtin').send_keys('123')
+    driver.find_element(By.NAME, 'taric').send_keys('123')
+    driver.find_element(By.NAME, 'weight').send_keys('123')
+    driver.find_element(By.NAME, 'dim_x').send_keys('2')
+    driver.find_element(By.NAME, 'dim_y').send_keys('2')
+    driver.find_element(By.NAME, 'dim_z').send_keys('2')
+    driver.find_element(By.NAME, 'save').click()
+    driver.find_element(By.LINK_TEXT, name).click()
+
+
+def generate_name():
+    username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(5, 10)))
+    return username
