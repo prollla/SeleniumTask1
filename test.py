@@ -2,12 +2,14 @@ import random
 import string
 import time
 import os
+from selenium.webdriver.support import expected_conditions as EC
 
 import pytest
 from selenium import webdriver
 from selenium.common import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 @pytest.fixture()
@@ -373,3 +375,32 @@ def test_example9(driver):
 def generate_name():
     username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(5, 10)))
     return username
+
+
+def test_example10(driver):
+    driver.maximize_window()
+    driver.get('http://localhost/litecart')
+    for i in range(1, 4):
+        box = driver.find_element(By.ID, 'box-most-popular')
+        box.find_element(By.CLASS_NAME, 'name').click()
+        try:
+            select = driver.find_element(By.CSS_SELECTOR, "select")
+            driver.execute_script("arguments[0].selectedIndex=1; arguments[0].dispatchEvent(new Event('change'))",
+                                  select)
+        except:
+            pass
+        driver.find_element(By.NAME, 'add_cart_product').click()
+        WebDriverWait(driver, 10).until(EC.text_to_be_present_in_element((By.CLASS_NAME, 'quantity'), str(i)))
+        driver.back()
+    driver.find_element(By.LINK_TEXT, 'Checkout »').click()
+    time.sleep(5)
+    elements = driver.find_elements(By.XPATH, "//td[@class='item']")
+    for i in range(len(elements)):
+        try:
+            remove_button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.NAME, 'remove_cart_item')))
+            remove_button.click()
+            WebDriverWait(driver, 5).until(EC.staleness_of(driver.find_element(By.NAME, 'remove_cart_item')))
+            WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.NAME, 'remove_cart_item')))
+        except:
+            driver.find_element(By.LINK_TEXT, "<< Back").click()
+
