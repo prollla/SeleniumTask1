@@ -404,3 +404,22 @@ def test_example10(driver):
         except:
             driver.find_element(By.LINK_TEXT, "<< Back").click()
 
+
+def test_example11(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/?app=countries&doc=countries")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    driver.find_element(By.NAME, 'login').click()
+    driver.find_element(By.LINK_TEXT, 'Add New Country').click()
+    links = driver.find_elements(By.CSS_SELECTOR, "i.fa.fa-external-link")
+    for link in links:
+        link.click()
+        WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(2))
+        driver.switch_to.window(driver.window_handles[-1])
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        time.sleep(2)
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
+    time.sleep(5)
