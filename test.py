@@ -397,9 +397,10 @@ def test_example10(driver):
     elements = driver.find_elements(By.XPATH, "//td[@class='item']")
     for i in range(len(elements)):
         try:
-            remove_button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.NAME, 'remove_cart_item'))) #Находим элемент
-            remove_button.click() #Кликаем
-            WebDriverWait(driver, 5).until(EC.staleness_of(remove_button)) #Ждём пока исчезнет
+            remove_button = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.NAME, 'remove_cart_item')))  #Находим элемент
+            remove_button.click()  #Кликаем
+            WebDriverWait(driver, 5).until(EC.staleness_of(remove_button))  #Ждём пока исчезнет
             WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.NAME, 'remove_cart_item')))
         except:
             driver.find_element(By.LINK_TEXT, "<< Back").click()
@@ -435,7 +436,7 @@ def test_example12(driver):
     colspan_element = driver.find_element(By.XPATH, '//td[@colspan]')
     colspan_value = int(colspan_element.get_attribute("colspan"))
     browser_logs = []
-    for i in range(colspan_value, colspan_value*2):  # Пример: открываем первые 5 товаров
+    for i in range(colspan_value, colspan_value * 2):
         product_link = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, f"//*[@id='content']/form/table/tbody/tr[{i}]/td[3]/a")))
         product_link.click()
