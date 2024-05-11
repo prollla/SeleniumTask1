@@ -423,3 +423,24 @@ def test_example11(driver):
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
     time.sleep(5)
+
+
+def test_example12(driver):
+    driver.maximize_window()
+    driver.get("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1")
+    driver.find_element(By.NAME, 'username').send_keys("admin")
+    driver.find_element(By.NAME, 'password').send_keys("admin")
+    driver.find_element(By.NAME, 'remember_me').click()
+    driver.find_element(By.NAME, 'login').click()
+    colspan_element = driver.find_element(By.XPATH, '//td[@colspan]')
+    colspan_value = int(colspan_element.get_attribute("colspan"))
+    browser_logs = []
+    for i in range(colspan_value, colspan_value*2):  # Пример: открываем первые 5 товаров
+        product_link = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, f"//*[@id='content']/form/table/tbody/tr[{i}]/td[3]/a")))
+        product_link.click()
+        logs = driver.get_log('browser')
+        browser_logs.extend(logs)
+        driver.back()
+    for log in browser_logs:
+        print(log)
