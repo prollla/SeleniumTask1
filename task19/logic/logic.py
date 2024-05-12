@@ -10,9 +10,8 @@ class Logic:
         self.productPage = ProductPage(driver)
         self.cartPage = CartPage(driver)
 
-    def addProductToCart(self):
+    def addProductToCart(self, count):
         self.mainPage.moveToMainPage()
-        count = 3
         for i in range(1, count+1):
             self.mainPage.moveToProductToCart()
             if self.productPage.isFindedElementSize():
