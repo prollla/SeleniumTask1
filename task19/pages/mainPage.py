@@ -11,6 +11,6 @@ class MainPage:
     def moveToMainPage(self):
         return self.driver.get(self.mainUrl)
 
-    def moveToProductToCart(self, driver):
-        box = driver.find_element(By.ID, 'box-most-popular')
+    def moveToProductToCart(self):
+        box = self.driver.find_element(By.ID, 'box-most-popular')
         box.find_element(By.CLASS_NAME, 'name').click()

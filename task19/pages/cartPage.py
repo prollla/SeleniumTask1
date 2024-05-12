@@ -9,16 +9,16 @@ class CartPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
-    def moveToCartPage(self, driver):
-        driver.find_element(By.LINK_TEXT, 'Checkout »').click()
+    def moveToCartPage(self):
+        self.driver.find_element(By.LINK_TEXT, 'Checkout »').click()
 
-    def isCartEmpty(self, driver):
-        if len(driver.find_elements(By.XPATH, "//div[@id=\"order_confirmation-wrapper\"]")) > 0:
+    def isCartEmpty(self):
+        if len(self.driver.find_elements(By.XPATH, "//div[@id=\"order_confirmation-wrapper\"]")) > 0:
             return False
         else:
             return True
 
-    def removeProduct(self, driver):
-        loc = driver.find_element(By.NAME, "remove_cart_item")
+    def removeProduct(self):
+        loc = self.driver.find_element(By.NAME, "remove_cart_item")
         loc.click()
-        WebDriverWait(driver, 10).until((EC.staleness_of(loc)))
+        WebDriverWait(self.driver, 10).until((EC.staleness_of(loc)))

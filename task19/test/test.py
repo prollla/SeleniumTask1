@@ -12,5 +12,5 @@ def driver(request):
 
 def test_example(driver):
     app = Logic(driver)
-    app.addProductToCart(driver)
-    app.removeProduct(driver)
+    app.addProductToCart()
+    app.removeProduct()

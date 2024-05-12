@@ -10,16 +10,17 @@ class Logic:
         self.productPage = ProductPage(driver)
         self.cartPage = CartPage(driver)
 
-    def addProductToCart(self, driver):
+    def addProductToCart(self):
         self.mainPage.moveToMainPage()
-        for i in range(1, 4):
-            self.mainPage.moveToProductToCart(driver)
-            if self.productPage.isFindedElementSize(driver):
-                self.productPage.selectSizeDucks(driver)
-            self.productPage.addProduct(driver)
-            self.productPage.waitAddedToTheCart(driver, i)
+        count = 3
+        for i in range(1, count+1):
+            self.mainPage.moveToProductToCart()
+            if self.productPage.isFindedElementSize():
+                self.productPage.selectSizeDucks()
+            self.productPage.addProduct()
+            self.productPage.waitAddedToTheCart(i)
 
-    def removeProduct(self, driver):
-        self.cartPage.moveToCartPage(driver)
-        while not self.cartPage.isCartEmpty(driver):
-            self.cartPage.removeProduct(driver)
+    def removeProduct(self):
+        self.cartPage.moveToCartPage()
+        while not self.cartPage.isCartEmpty():
+            self.cartPage.removeProduct()
